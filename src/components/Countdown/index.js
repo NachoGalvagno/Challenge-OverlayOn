@@ -21,7 +21,7 @@ const Countdown = ({}) => {
     </BigContainer>
   ) 
 };
- 
+
 Countdown.propTypes = {
   time: PropTypes.arrayOf(PropTypes.number),
 };
