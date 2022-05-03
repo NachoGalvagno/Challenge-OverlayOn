@@ -1,14 +1,42 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { useState, useEffect } from 'react';
 
 import { Time, Container, BigContainer, Text, SmallContainer, MiniContainer, Background} from './styles';
 
 const Countdown = ({}) => {
+  const [diff, setDiff] = useState(null)
+  const [initial, setInitial] = useState(null)
+
+  const tick = () =>{
+    setDiff(new Date(-new Date() + initial))
+  }
+
+  
+  const start = () => {
+    setInitial(+new Date())
+  }
+
+  useEffect(()=>{
+    if(initial){
+      requestAnimationFrame(tick)
+    }
+  }, [initial])
+
+  
+  useEffect(()=>{
+    if(diff){
+      requestAnimationFrame(tick)
+    }
+  }, [diff])
+
+  
+
   return(
     <BigContainer>
       <Container>
         <Background>
-          <Time>00 : 00 : 00</Time>
+          <Time onClick={start}>{timeFormat(diff)}</Time>
           <SmallContainer>
             <MiniContainer>
               <Text>Hours</Text>
@@ -28,5 +56,19 @@ Countdown.propTypes = {
 Countdown.defaultProps = { 
   time: [],
 };
+
+const timeFormat = (date) =>{
+  if(!date) return "24 : 00 : 00"
+
+  let hh = date.getUTCHours() 
+  let mm = date.getUTCMinutes()
+  let ss = date.getSeconds()
+
+  hh = hh < 10 ? "0"+hh : hh 
+  mm = mm < 10 ? "0"+mm : mm
+  ss = ss < 10 ? "0"+ss : ss
+
+  return `${hh} : ${mm} : ${ss}`
+}
 
 export default Countdown;
